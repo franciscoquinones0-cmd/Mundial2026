@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mundial 2026 · Panel de momios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Expanded:wght@600;700;800&family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pitch-900:#0c1f17;
+  --pitch-800:#12301f;
+  --pitch-700:#1a4029;
+  --line:#2c5239;
+  --line-soft:#1f3826;
+  --paper:#f4f1e6;
+  --paper-dim:#cfc9b4;
+  --ink:#0c1f17;
+  --ink-soft:#4d5a4f;
+  --yellow:#f4c430;
+  --yellow-deep:#7a5c0a;
+  --red:#d9483a;
+  --red-deep:#5e1b14;
+  --green-pos:#3f9142;
+  --green-pos-deep:#0f3a14;
+  --white-line: rgba(244,241,230,0.14);
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--pitch-900);
+  color:var(--paper);
+  font-family:'Inter',system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.field-texture{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+  background:
+    repeating-linear-gradient(90deg, transparent 0, transparent 78px, var(--white-line) 78px, var(--white-line) 79px);
+  opacity:0.5;
+}
+.wrap{position:relative; z-index:1; max-width:1040px; margin:0 auto; padding:0 24px 96px;}
+
+/* ---------- Header / hero ---------- */
+header{
+  padding:56px 0 40px;
+  border-bottom:1px solid var(--line);
+  position:relative;
+}
+.kicker{
+  font-family:'Roboto Mono',monospace;
+  font-size:12px;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  color:var(--yellow);
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:18px;
+}
+.kicker::before{
+  content:"";
+  width:8px;height:8px;
+  background:var(--yellow);
+  display:inline-block;
+  border-radius:50%;
+}
+h1{
+  font-family:'Archivo Expanded',sans-serif;
+  font-weight:800;
+  font-size:clamp(34px,5.4vw,58px);
+  line-height:0.98;
+  letter-spacing:-0.01em;
+  margin:0 0 18px;
+  text-transform:uppercase;
+}
+h1 em{
+  font-style:normal;
+  color:var(--yellow);
+}
+.lede{
+  font-size:16px;
+  line-height:1.65;
+  color:var(--paper-dim);
+  max-width:600px;
+  margin:0 0 28px;
+}
+.method-strip{
+  display:flex;
+  gap:28px;
+  flex-wrap:wrap;
+  font-family:'Roboto Mono',monospace;
+  font-size:12px;
+  color:var(--paper-dim);
+}
+.method-strip strong{
+  color:var(--paper);
+  font-weight:600;
+}
+.disclaimer{
+  margin-top:28px;
+  padding:14px 16px;
+  border:1px solid var(--line);
+  border-left:3px solid var(--yellow);
+  font-size:13px;
+  line-height:1.6;
+  color:var(--paper-dim);
+  background:rgba(244,196,48,0.04);
+}
+
+/* ---------- Picker ---------- */
+.picker-section{padding:40px 0 8px;}
+.section-label{
+  font-family:'Roboto Mono',monospace;
+  font-size:11px;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:var(--paper-dim);
+  margin:0 0 14px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.section-label .n{
+  color:var(--yellow);
+}
+select, input{
+  font-family:'Inter',sans-serif;
+  background:var(--pitch-800);
+  border:1px solid var(--line);
+  color:var(--paper);
+  border-radius:3px;
+  padding:11px 12px;
+  font-size:14.5px;
+}
+select:focus, input:focus{
+  outline:none;
+  border-color:var(--yellow);
+}
+#matchSelect{
+  width:100%;
+  appearance:none;
+  background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="9" viewBox="0 0 14 9"><path d="M1 1L7 7L13 1" stroke="%23cfc9b4" stroke-width="1.6" fill="none"/></svg>');
+  background-repeat:no-repeat;
+  background-position:right 14px center;
+  padding-right:36px;
+  cursor:pointer;
+}
+
+/* ---------- Scoreboard ---------- */
+.scoreboard{
+  margin-top:28px;
+  background:var(--pitch-800);
+  border:1px solid var(--line);
+  border-radius:4px;
+  padding:28px 28px 22px;
+  position:relative;
+  overflow:hidden;
+}
+.scoreboard::before{
+  content:"";
+  position:absolute;
+  top:0;left:0;right:0;
+  height:3px;
+  background:repeating-linear-gradient(90deg, var(--yellow) 0 16px, transparent 16px 28px);
+  opacity:0.7;
+}
+.sb-date{
+  font-family:'Roboto Mono',monospace;
+  font-size:12px;
+  color:var(--paper-dim);
+  text-transform:capitalize;
+  margin-bottom:18px;
+}
+.sb-teams{
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
+  gap:18px;
+}
+.sb-team{display:flex; flex-direction:column; gap:6px;}
+.sb-team.away{align-items:flex-end; text-align:right;}
+.sb-team-name{
+  font-family:'Archivo Expanded',sans-serif;
+  font-weight:700;
+  font-size:clamp(18px,2.6vw,26px);
+  text-transform:uppercase;
+  line-height:1.05;
+}
+.sb-xg{
+  font-family:'Roboto Mono',monospace;
+  font-size:13px;
+  color:var(--yellow);
+}
+.sb-vs{
+  font-family:'Roboto Mono',monospace;
+  font-size:13px;
+  color:var(--paper-dim);
+  text-align:center;
+  padding:0 8px;
+}
+.sb-score-strip{
+  display:flex;
+  justify-content:center;
+  gap:18px;
+  margin-top:20px;
+  padding-top:18px;
+  border-top:1px solid var(--line-soft);
+  flex-wrap:wrap;
+}
+.sb-stat{text-align:center;}
+.sb-stat-label{
+  font-family:'Roboto Mono',monospace;
+  font-size:10.5px;
+  letter-spacing:0.06em;
+  text-transform:uppercase;
+  color:var(--paper-dim);
+  margin-bottom:4px;
+}
+.sb-stat-value{
+  font-family:'Archivo Expanded',sans-serif;
+  font-weight:700;
+  font-size:18px;
+}
+
+/* ---------- Market cards ---------- */
+.markets{
+  margin-top:36px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:16px;
+}
+.card{
+  background:var(--pitch-800);
+  border:1px solid var(--line);
+  border-radius:4px;
+  padding:20px 20px 16px;
+}
+.card-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:16px;
+}
+.card-title{
+  font-family:'Archivo Expanded',sans-serif;
+  font-weight:700;
+  font-size:14px;
+  text-transform:uppercase;
+  letter-spacing:0.02em;
+}
+.card-title .num{
+  color:var(--yellow);
+  margin-right:8px;
+  font-family:'Roboto Mono',monospace;
+  font-size:12px;
+}
+#ouLine{
+  width:auto;
+  padding:5px 28px 5px 10px;
+  font-size:12.5px;
+  background-position:right 9px center;
+}
+.row{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 50px 78px 64px;
+  align-items:center;
+  gap:6px;
+  padding:9px 0;
+  border-bottom:1px solid var(--line-soft);
+}
+.row:last-child{border-bottom:none;}
+.row-label{
+  font-size:13px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  min-width:0;
+}
+.row-model{
+  font-family:'Roboto Mono',monospace;
+  font-size:11.5px;
+  color:var(--paper-dim);
+  text-align:right;
+}
+.row input{
+  width:100%;
+  padding:7px 8px;
+  font-size:13px;
+  text-align:center;
+  font-family:'Roboto Mono',monospace;
+}
+.edge-pill{
+  font-family:'Roboto Mono',monospace;
+  font-size:12px;
+  font-weight:600;
+  text-align:center;
+  padding:5px 4px;
+  border-radius:3px;
+  background:transparent;
+  color:var(--paper-dim);
+  border:1px solid var(--line);
+}
+.edge-pill.pos{
+  background:rgba(63,145,66,0.16);
+  color:#7fce82;
+  border-color:rgba(63,145,66,0.4);
+}
+.edge-pill.strong{
+  background:var(--yellow);
+  color:var(--ink);
+  border-color:var(--yellow);
+}
+.edge-pill.neg{
+  background:rgba(217,72,58,0.14);
+  color:#f0958b;
+  border-color:rgba(217,72,58,0.35);
+}
+
+/* ---------- Summary / recommendation ---------- */
+.summary{
+  margin-top:24px;
+  background:var(--pitch-800);
+  border:1px solid var(--line);
+  border-radius:4px;
+  padding:22px 24px 8px;
+}
+.summary-empty{
+  font-size:13.5px;
+  color:var(--paper-dim);
+  padding:8px 0 16px;
+}
+.rec-banner{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:16px 18px;
+  border-radius:4px;
+  margin-bottom:18px;
+  border:1px solid;
+}
+.rec-banner.strong{
+  background:rgba(244,196,48,0.1);
+  border-color:var(--yellow);
+}
+.rec-banner.mild{
+  background:rgba(63,145,66,0.08);
+  border-color:rgba(63,145,66,0.35);
+}
+.rec-banner.none{
+  background:rgba(217,72,58,0.08);
+  border-color:rgba(217,72,58,0.3);
+}
+.rec-card-badge{
+  font-family:'Archivo Expanded',sans-serif;
+  font-weight:800;
+  font-size:22px;
+  flex-shrink:0;
+  width:46px;height:46px;
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--yellow);
+  color:var(--ink);
+}
+.rec-banner.none .rec-card-badge{background:var(--red); color:#fff;}
+.rec-banner.mild .rec-card-badge{background:var(--green-pos); color:#fff;}
+.rec-text-label{
+  font-family:'Roboto Mono',monospace;
+  font-size:10.5px;
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+  color:var(--paper-dim);
+  margin-bottom:3px;
+}
+.rec-text-value{
+  font-family:'Archivo Expanded',sans-serif;
+  font-weight:700;
+  font-size:17px;
+  text-transform:uppercase;
+}
+.rec-text-sub{
+  font-size:13px;
+  color:var(--paper-dim);
+  margin-top:3px;
+}
+.ledger{
+  font-family:'Roboto Mono',monospace;
+  font-size:12px;
+}
+.ledger-row{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  padding:9px 0;
+  border-bottom:1px solid var(--line-soft);
+  flex-wrap:wrap;
+}
+.ledger-row:last-child{border-bottom:none;}
+.ledger-mkt{color:var(--paper-dim);}
+.ledger-detail{color:var(--paper-dim); text-align:right;}
+.ledger-edge{font-weight:600; margin-left:6px;}
+
+/* ---------- Methodology footer ---------- */
+.method-section{
+  margin-top:56px;
+  padding-top:32px;
+  border-top:1px solid var(--line);
+}
+.method-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:24px;
+  margin-top:18px;
+}
+.method-item h3{
+  font-family:'Archivo Expanded',sans-serif;
+  font-size:14px;
+  text-transform:uppercase;
+  margin:0 0 8px;
+  color:var(--yellow);
+}
+.method-item p{
+  font-size:13.5px;
+  line-height:1.6;
+  color:var(--paper-dim);
+  margin:0;
+}
+footer{
+  margin-top:56px;
+  padding-top:24px;
+  border-top:1px solid var(--line);
+  font-family:'Roboto Mono',monospace;
+  font-size:11.5px;
+  color:var(--paper-dim);
+  display:flex;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+@media (max-width:600px){
+  .row{grid-template-columns:1fr 40px 1fr 56px;}
+  .sb-teams{grid-template-columns:1fr;}
+  .sb-vs{order:3; padding-top:8px;}
+  .sb-team.away{align-items:flex-start; text-align:left;}
+}
+</style>
+</head>
+<body>
+<div class="field-texture"></div>
+<div class="wrap">
+
+  <header>
+    <div class="kicker">Modelo Dixon-Coles · Mundial 2026</div>
+    <h1>Panel de <em>momios</em><br>fase de grupos</h1>
+    <p class="lede">Compara los momios de tu casa de apuestas contra las probabilidades de un modelo estadístico entrenado con 11,754 partidos internacionales. Captura los momios decimales y obtén el edge calculado al instante, mercado por mercado.</p>
+    <div class="method-strip">
+      <span><strong>44</strong> partidos modelados</span>
+      <span><strong>262</strong> selecciones en el modelo</span>
+      <span><strong>57.1%</strong> acierto 1X2 en backtest</span>
+    </div>
+    <div class="disclaimer">Con fines recreativos y educativos. Las probabilidades son estimaciones de un modelo estadístico, no garantías — el fútbol tiene varianza alta. Este panel no es asesoría financiera ni de apuestas.</div>
+  </header>
+
+  <section class="picker-section">
+    <p class="section-label"><span class="n">01</span> Elige el partido</p>
+    <select id="matchSelect"></select>
+
+    <div class="scoreboard" id="scoreboard"></div>
+  </section>
+
+  <section>
+    <p class="section-label" style="margin-top:36px;"><span class="n">02</span> Captura los momios (decimales)</p>
+    <div class="markets">
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title"><span class="num">1X2</span>Resultado final</span>
+        </div>
+        <div id="rows1x2"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title"><span class="num">O/U</span>Total de goles</span>
+          <select id="ouLine">
+            <option value="1.5">Línea 1.5</option>
+            <option value="2.5" selected>Línea 2.5</option>
+            <option value="3.5">Línea 3.5</option>
+          </select>
+        </div>
+        <div id="rowsOU"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title"><span class="num">BTTS</span>Ambos anotan</span>
+        </div>
+        <div id="rowsBtts"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <p class="section-label" style="margin-top:36px;"><span class="n">03</span> Recomendación</p>
+    <div class="summary" id="summaryPanel"></div>
+  </section>
+
+  <section class="method-section">
+    <p class="section-label">Cómo se calcula</p>
+    <div class="method-grid">
+      <div class="method-item">
+        <h3>Probabilidad del modelo</h3>
+        <p>Cada partido se simula con un modelo Dixon-Coles (Poisson bivariado con corrección de marcador bajo), ajustado con rating de ataque/defensa por selección, ventaja de localía, fuerza de oposición y enfrentamientos directos recientes.</p>
+      </div>
+      <div class="method-item">
+        <h3>Probabilidad implícita</h3>
+        <p>Se calcula como 1/momio decimal × 100. Cuando capturas ambos lados de un mercado, se remueve el margen de la casa (overround) repartiéndolo proporcionalmente entre las opciones.</p>
+      </div>
+      <div class="method-item">
+        <h3>Edge</h3>
+        <p>Probabilidad del modelo menos probabilidad implícita sin margen. Edge positivo sugiere que la casa paga más de lo que el modelo cree que vale esa apuesta. Edge ≥5% se marca como mejor valor.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Modelo entrenado con datos hasta el 18-jun-2026</span>
+    <span>Backtest fuera de muestra: Jornada 1 (28 partidos)</span>
+  </footer>
+
+</div>
+
+<script>
+const MATCHES = [{"date":"2026-06-19","home":"Scotland","away":"Morocco","xg_home":0.53,"xg_away":1.09,"p_home":17.0,"p_draw":34.4,"p_away":48.7,"p_o15":48.7,"p_o25":22.1,"p_o35":8.1,"p_btts":27.8,"best_score":"0-1","p_best_score":21.0,"cond_score":"0-1","p_cond_score":21.0},{"date":"2026-06-19","home":"Brazil","away":"Haiti","xg_home":2.78,"xg_away":0.55,"p_home":83.2,"p_draw":12.2,"p_away":4.6,"p_o15":84.7,"p_o25":64.5,"p_o35":42.4,"p_btts":39.8,"best_score":"2-0","p_best_score":13.9,"cond_score":"2-0","p_cond_score":13.9},{"date":"2026-06-19","home":"United States","away":"Australia","xg_home":1.19,"xg_away":1.34,"p_home":32.3,"p_draw":28.3,"p_away":39.4,"p_o15":72.6,"p_o25":46.3,"p_o35":24.8,"p_btts":52.0,"best_score":"1-1","p_best_score":13.5,"cond_score":"0-1","p_cond_score":9.9},{"date":"2026-06-19","home":"Turkey","away":"Paraguay","xg_home":1.49,"xg_away":1.11,"p_home":45.3,"p_draw":27.3,"p_away":27.4,"p_o15":74.0,"p_o25":48.2,"p_o35":26.4,"p_btts":52.7,"best_score":"1-1","p_best_score":13.0,"cond_score":"1-0","p_cond_score":10.3},{"date":"2026-06-20","home":"Germany","away":"Ivory Coast","xg_home":1.74,"xg_away":0.79,"p_home":59.4,"p_draw":24.6,"p_away":16.1,"p_o15":72.7,"p_o25":46.6,"p_o35":25.1,"p_btts":45.9,"best_score":"1-0","p_best_score":13.1,"cond_score":"1-0","p_cond_score":13.1},{"date":"2026-06-20","home":"Ecuador","away":"Curaçao","xg_home":1.99,"xg_away":0.31,"p_home":77.5,"p_draw":18.0,"p_away":4.5,"p_o15":67.4,"p_o25":40.5,"p_o35":20.2,"p_btts":23.7,"best_score":"2-0","p_best_score":19.8,"cond_score":"2-0","p_cond_score":19.8},{"date":"2026-06-20","home":"Netherlands","away":"Sweden","xg_home":2.44,"xg_away":1.5,"p_home":57.9,"p_draw":19.8,"p_away":22.3,"p_o15":90.8,"p_o25":75.3,"p_o35":55.5,"p_btts":71.3,"best_score":"2-1","p_best_score":8.7,"cond_score":"2-1","p_cond_score":8.7},{"date":"2026-06-20","home":"Tunisia","away":"Japan","xg_home":0.63,"xg_away":2.18,"p_home":8.9,"p_draw":18.6,"p_away":72.6,"p_o15":77.7,"p_o25":53.4,"p_o35":31.2,"p_btts":42.1,"best_score":"0-2","p_best_score":14.3,"cond_score":"0-2","p_cond_score":14.3},{"date":"2026-06-21","home":"Spain","away":"Saudi Arabia","xg_home":2.26,"xg_away":0.4,"p_home":79.5,"p_draw":15.7,"p_away":4.8,"p_o15":74.8,"p_o25":49.7,"p_o35":27.7,"p_btts":30.0,"best_score":"2-0","p_best_score":17.8,"cond_score":"2-0","p_cond_score":17.8},{"date":"2026-06-21","home":"Uruguay","away":"Cape Verde","xg_home":1.01,"xg_away":0.44,"p_home":48.5,"p_draw":36.4,"p_away":15.1,"p_o15":43.0,"p_o25":17.7,"p_o35":5.9,"p_btts":23.1,"best_score":"0-0","p_best_score":24.2,"cond_score":"1-0","p_cond_score":23.1},{"date":"2026-06-21","home":"Belgium","away":"Iran","xg_home":1.91,"xg_away":0.97,"p_home":58.6,"p_draw":23.2,"p_away":18.1,"p_o15":78.8,"p_o25":54.9,"p_o35":32.5,"p_btts":53.5,"best_score":"1-1","p_best_score":11.0,"cond_score":"2-0","p_cond_score":10.2},{"date":"2026-06-21","home":"New Zealand","away":"Egypt","xg_home":0.65,"xg_away":1.19,"p_home":19.4,"p_draw":32.2,"p_away":48.4,"p_o15":55.7,"p_o25":28.1,"p_o35":11.6,"p_btts":34.0,"best_score":"0-1","p_best_score":18.1,"cond_score":"0-1","p_cond_score":18.1},{"date":"2026-06-22","home":"France","away":"Iraq","xg_home":2.39,"xg_away":0.49,"p_home":79.4,"p_draw":15.2,"p_away":5.5,"p_o15":78.7,"p_o25":55.1,"p_o35":32.7,"p_btts":35.7,"best_score":"2-0","p_best_score":16.0,"cond_score":"2-0","p_cond_score":16.0},{"date":"2026-06-22","home":"Norway","away":"Senegal","xg_home":2.16,"xg_away":1.14,"p_home":60.1,"p_draw":21.2,"p_away":18.6,"p_o15":84.7,"p_o25":64.1,"p_o35":42.0,"p_btts":60.7,"best_score":"2-1","p_best_score":9.8,"cond_score":"2-1","p_cond_score":9.8},{"date":"2026-06-22","home":"Argentina","away":"Austria","xg_home":1.5,"xg_away":0.5,"p_home":61.5,"p_draw":27.0,"p_away":11.5,"p_o15":59.8,"p_o25":32.1,"p_o35":14.2,"p_btts":31.0,"best_score":"1-0","p_best_score":19.8,"cond_score":"1-0","p_cond_score":19.8},{"date":"2026-06-22","home":"Jordan","away":"Algeria","xg_home":1.11,"xg_away":1.8,"p_home":22.8,"p_draw":24.4,"p_away":52.8,"p_o15":79.4,"p_o25":55.8,"p_o35":33.4,"p_btts":56.7,"best_score":"1-1","p_best_score":11.5,"cond_score":"1-2","p_cond_score":9.8},{"date":"2026-06-23","home":"Portugal","away":"Uzbekistan","xg_home":1.96,"xg_away":0.64,"p_home":68.1,"p_draw":21.2,"p_away":10.6,"p_o15":73.7,"p_o25":48.0,"p_o35":26.3,"p_btts":41.0,"best_score":"2-0","p_best_score":14.3,"cond_score":"2-0","p_cond_score":14.3},{"date":"2026-06-23","home":"Colombia","away":"DR Congo","xg_home":1.39,"xg_away":0.65,"p_home":54.1,"p_draw":29.2,"p_away":16.7,"p_o15":61.0,"p_o25":33.3,"p_o35":14.9,"p_btts":36.5,"best_score":"1-0","p_best_score":17.4,"cond_score":"1-0","p_cond_score":17.4},{"date":"2026-06-23","home":"England","away":"Ghana","xg_home":2.02,"xg_away":0.52,"p_home":72.6,"p_draw":19.5,"p_away":7.9,"p_o15":72.6,"p_o25":46.7,"p_o35":25.2,"p_btts":35.6,"best_score":"2-0","p_best_score":16.1,"cond_score":"2-0","p_cond_score":16.1},{"date":"2026-06-23","home":"Panama","away":"Croatia","xg_home":0.9,"xg_away":2.18,"p_home":13.8,"p_draw":20.2,"p_away":66.0,"p_o15":81.8,"p_o25":59.4,"p_o35":37.1,"p_btts":53.2,"best_score":"0-2","p_best_score":10.9,"cond_score":"0-2","p_cond_score":10.9},{"date":"2026-06-24","home":"Scotland","away":"Brazil","xg_home":0.82,"xg_away":1.52,"p_home":19.7,"p_draw":27.4,"p_away":52.9,"p_o15":68.5,"p_o25":41.4,"p_o35":20.9,"p_btts":44.5,"best_score":"0-1","p_best_score":13.9,"cond_score":"0-1","p_cond_score":13.9},{"date":"2026-06-24","home":"Morocco","away":"Haiti","xg_home":2.0,"xg_away":0.35,"p_home":76.7,"p_draw":18.3,"p_away":5.0,"p_o15":68.4,"p_o25":41.6,"p_o35":21.0,"p_btts":25.8,"best_score":"2-0","p_best_score":19.1,"cond_score":"2-0","p_cond_score":19.1},{"date":"2026-06-24","home":"Bosnia and Herzegovina","away":"Qatar","xg_home":1.87,"xg_away":0.98,"p_home":57.7,"p_draw":23.6,"p_away":18.7,"p_o15":78.3,"p_o25":54.1,"p_o35":31.8,"p_btts":53.3,"best_score":"1-1","p_best_score":11.2,"cond_score":"1-0","p_cond_score":10.2},{"date":"2026-06-24","home":"South Africa","away":"South Korea","xg_home":0.81,"xg_away":1.43,"p_home":20.6,"p_draw":28.5,"p_away":50.8,"p_o15":66.3,"p_o25":38.8,"p_o35":18.9,"p_btts":43.0,"best_score":"0-1","p_best_score":14.5,"cond_score":"0-1","p_cond_score":14.5},{"date":"2026-06-24","home":"Mexico","away":"Czech Republic","xg_home":2.08,"xg_away":0.64,"p_home":70.4,"p_draw":19.8,"p_away":9.8,"p_o15":76.1,"p_o25":51.2,"p_o35":29.1,"p_btts":42.1,"best_score":"2-0","p_best_score":14.2,"cond_score":"2-0","p_cond_score":14.2},{"date":"2026-06-24","home":"Canada","away":"Switzerland","xg_home":1.49,"xg_away":1.36,"p_home":39.8,"p_draw":26.4,"p_away":33.9,"p_o15":78.4,"p_o25":54.1,"p_o35":31.8,"p_btts":58.2,"best_score":"1-1","p_best_score":12.4,"cond_score":"2-1","p_cond_score":8.7},{"date":"2026-06-25","home":"United States","away":"Turkey","xg_home":2.01,"xg_away":1.64,"p_home":46.1,"p_draw":22.5,"p_away":31.5,"p_o15":88.4,"p_o25":70.6,"p_o35":49.5,"p_btts":70.3,"best_score":"1-1","p_best_score":9.1,"cond_score":"2-1","p_cond_score":8.6},{"date":"2026-06-25","home":"Paraguay","away":"Australia","xg_home":0.64,"xg_away":1.26,"p_home":18.1,"p_draw":31.2,"p_away":50.7,"p_o15":57.1,"p_o25":29.4,"p_o35":12.4,"p_btts":34.3,"best_score":"0-1","p_best_score":18.2,"cond_score":"0-1","p_cond_score":18.2},{"date":"2026-06-25","home":"Curaçao","away":"Ivory Coast","xg_home":0.5,"xg_away":2.17,"p_home":6.7,"p_draw":17.6,"p_away":75.6,"p_o15":75.1,"p_o25":50.0,"p_o35":28.0,"p_btts":35.5,"best_score":"0-2","p_best_score":16.3,"cond_score":"0-2","p_cond_score":16.3},{"date":"2026-06-25","home":"Ecuador","away":"Germany","xg_home":0.73,"xg_away":1.09,"p_home":23.5,"p_draw":33.5,"p_away":43.1,"p_o15":55.0,"p_o25":27.4,"p_o35":11.2,"p_btts":35.1,"best_score":"0-0","p_best_score":17.0,"cond_score":"0-1","p_cond_score":16.9},{"date":"2026-06-25","home":"Japan","away":"Sweden","xg_home":1.98,"xg_away":1.28,"p_home":53.1,"p_draw":22.9,"p_away":23.9,"p_o15":84.3,"p_o25":63.3,"p_o35":41.2,"p_btts":62.9,"best_score":"1-1","p_best_score":10.3,"cond_score":"2-1","p_cond_score":9.6},{"date":"2026-06-25","home":"Tunisia","away":"Netherlands","xg_home":0.73,"xg_away":2.72,"p_home":7.1,"p_draw":14.1,"p_away":78.8,"p_o15":86.3,"p_o25":67.1,"p_o35":45.3,"p_btts":48.8,"best_score":"0-2","p_best_score":11.7,"cond_score":"0-2","p_cond_score":11.7},{"date":"2026-06-26","home":"New Zealand","away":"Belgium","xg_home":0.67,"xg_away":2.08,"p_home":10.2,"p_draw":20.0,"p_away":69.7,"p_o15":76.5,"p_o25":51.7,"p_o35":29.6,"p_btts":43.1,"best_score":"0-2","p_best_score":13.9,"cond_score":"0-2","p_cond_score":13.9},{"date":"2026-06-26","home":"Egypt","away":"Iran","xg_home":1.09,"xg_away":0.95,"p_home":37.7,"p_draw":32.0,"p_away":30.3,"p_o15":61.3,"p_o25":33.4,"p_o35":15.0,"p_btts":41.5,"best_score":"1-1","p_best_score":14.3,"cond_score":"1-0","p_cond_score":13.4},{"date":"2026-06-26","home":"Cape Verde","away":"Saudi Arabia","xg_home":0.78,"xg_away":0.69,"p_home":33.3,"p_draw":38.7,"p_away":28.1,"p_o15":43.9,"p_o25":18.3,"p_o35":6.2,"p_btts":27.7,"best_score":"0-0","p_best_score":23.8,"cond_score":"0-0","p_cond_score":23.8},{"date":"2026-06-26","home":"Uruguay","away":"Spain","xg_home":0.59,"xg_away":1.27,"p_home":16.5,"p_draw":31.0,"p_away":52.5,"p_o15":56.1,"p_o25":28.5,"p_o35":11.8,"p_btts":32.6,"best_score":"0-1","p_best_score":19.1,"cond_score":"0-1","p_cond_score":19.1},{"date":"2026-06-26","home":"Norway","away":"France","xg_home":1.44,"xg_away":1.58,"p_home":34.1,"p_draw":25.5,"p_away":40.4,"p_o15":81.0,"p_o25":58.1,"p_o35":35.7,"p_btts":61.2,"best_score":"1-1","p_best_score":11.8,"cond_score":"1-2","p_cond_score":8.8},{"date":"2026-06-26","home":"Senegal","away":"Iraq","xg_home":1.72,"xg_away":0.74,"p_home":60.3,"p_draw":24.7,"p_away":15.1,"p_o15":71.2,"p_o25":44.7,"p_o35":23.5,"p_btts":43.6,"best_score":"1-0","p_best_score":14.0,"cond_score":"1-0","p_cond_score":14.0},{"date":"2026-06-27","home":"DR Congo","away":"Uzbekistan","xg_home":0.85,"xg_away":0.58,"p_home":38.8,"p_draw":38.6,"p_away":22.5,"p_o15":42.6,"p_o25":17.4,"p_o35":5.7,"p_btts":25.9,"best_score":"0-0","p_best_score":24.6,"cond_score":"1-0","p_cond_score":19.7},{"date":"2026-06-27","home":"Colombia","away":"Portugal","xg_home":1.53,"xg_away":1.49,"p_home":38.1,"p_draw":25.6,"p_away":36.4,"p_o15":81.0,"p_o25":58.0,"p_o35":35.6,"p_btts":61.2,"best_score":"1-1","p_best_score":11.8,"cond_score":"2-1","p_cond_score":8.5},{"date":"2026-06-27","home":"Panama","away":"England","xg_home":0.52,"xg_away":2.68,"p_home":4.6,"p_draw":12.7,"p_away":82.7,"p_o15":83.1,"p_o25":61.9,"p_o35":39.6,"p_btts":37.8,"best_score":"0-2","p_best_score":14.7,"cond_score":"0-2","p_cond_score":14.7},{"date":"2026-06-27","home":"Algeria","away":"Austria","xg_home":0.94,"xg_away":1.44,"p_home":23.8,"p_draw":28.2,"p_away":48.0,"p_o15":69.5,"p_o25":42.6,"p_o35":21.8,"p_btts":47.3,"best_score":"1-1","p_best_score":13.3,"cond_score":"0-1","p_cond_score":12.6},{"date":"2026-06-27","home":"Jordan","away":"Argentina","xg_home":0.38,"xg_away":2.87,"p_home":2.7,"p_draw":10.0,"p_away":87.4,"p_o15":83.8,"p_o25":63.1,"p_o35":40.9,"p_btts":30.3,"best_score":"0-2","p_best_score":15.9,"cond_score":"0-2","p_cond_score":15.9},{"date":"2026-06-27","home":"Croatia","away":"Ghana","xg_home":1.65,"xg_away":0.91,"p_home":54.1,"p_draw":25.9,"p_away":20.0,"p_o15":73.0,"p_o25":47.0,"p_o35":25.4,"p_btts":48.8,"best_score":"1-1","p_best_score":12.3,"cond_score":"1-0","p_cond_score":12.1}];
+
+function fmt(n,d=1){ return Number(n).toFixed(d); }
+
+function buildSelect(){
+  const sel = document.getElementById('matchSelect');
+  let defaultIdx = 0;
+  MATCHES.forEach((m,i)=>{
+    const opt = document.createElement('option');
+    const d = new Date(m.date+'T00:00:00');
+    const dd = d.toLocaleDateString('es-MX',{day:'2-digit',month:'short'});
+    opt.value = i;
+    opt.textContent = dd + '   ' + m.home + ' vs ' + m.away;
+    if(m.home==='Spain' && m.away==='Saudi Arabia') defaultIdx = i;
+    sel.appendChild(opt);
+  });
+  sel.value = defaultIdx;
+}
+buildSelect();
+
+function impliedProb(o){
+  const v = parseFloat(o);
+  if(!v || v<=1) return null;
+  return 100/v;
+}
+function devig(arr){
+  const s = arr.reduce((a,b)=>a+b,0);
+  if(s<=0) return arr.map(()=>null);
+  return arr.map(p=>p/s*100);
+}
+function edgeClass(e){
+  if(e===null||isNaN(e)) return '';
+  if(e>=5) return 'strong';
+  if(e>=0) return 'pos';
+  return 'neg';
+}
+
+function oddsRow(id,label,modelP){
+  const shortLabel = label.length > 16 ? label.slice(0,15)+'…' : label;
+  return `<div class="row">
+    <span class="row-label" title="${label}">${shortLabel}</span>
+    <span class="row-model">${fmt(modelP)}%</span>
+    <input type="number" step="0.01" min="1.01" placeholder="momio" id="${id}">
+    <span class="edge-pill" id="${id}_edge">—</span>
+  </div>`;
+}
+
+let current = null;
+
+function render(){
+  const idx = parseInt(document.getElementById('matchSelect').value||0);
+  const m = MATCHES[idx];
+  current = m;
+  const ouLine = document.getElementById('ouLine').value;
+  const pOver = ouLine==='1.5'?m.p_o15:(ouLine==='2.5'?m.p_o25:m.p_o35);
+  const pUnder = 100-pOver;
+
+  const d = new Date(m.date+'T00:00:00');
+  const dd = d.toLocaleDateString('es-MX',{weekday:'long',day:'2-digit',month:'long'});
+
+  document.getElementById('scoreboard').innerHTML = `
+    <div class="sb-date">${dd}</div>
+    <div class="sb-teams">
+      <div class="sb-team home">
+        <div class="sb-team-name">${m.home}</div>
+        <div class="sb-xg">xG ${fmt(m.xg_home,2)}</div>
+      </div>
+      <div class="sb-vs">VS</div>
+      <div class="sb-team away">
+        <div class="sb-team-name">${m.away}</div>
+        <div class="sb-xg">xG ${fmt(m.xg_away,2)}</div>
+      </div>
+    </div>
+    <div class="sb-score-strip">
+      <div class="sb-stat"><div class="sb-stat-label">Gana ${m.home.length>14?m.home.slice(0,12)+'…':m.home}</div><div class="sb-stat-value">${fmt(m.p_home)}%</div></div>
+      <div class="sb-stat"><div class="sb-stat-label">Empate</div><div class="sb-stat-value">${fmt(m.p_draw)}%</div></div>
+      <div class="sb-stat"><div class="sb-stat-label">Gana ${m.away.length>14?m.away.slice(0,12)+'…':m.away}</div><div class="sb-stat-value">${fmt(m.p_away)}%</div></div>
+      <div class="sb-stat"><div class="sb-stat-label">Marcador típico</div><div class="sb-stat-value">${m.cond_score}</div></div>
+    </div>`;
+
+  document.getElementById('rows1x2').innerHTML =
+    oddsRow('odds_home', m.home, m.p_home)+
+    oddsRow('odds_draw', 'Empate', m.p_draw)+
+    oddsRow('odds_away', m.away, m.p_away);
+
+  document.getElementById('rowsOU').innerHTML =
+    oddsRow('odds_over', 'Over '+ouLine, pOver)+
+    oddsRow('odds_under', 'Under '+ouLine, pUnder);
+
+  document.getElementById('rowsBtts').innerHTML =
+    oddsRow('odds_btts_yes','Sí', m.p_btts)+
+    oddsRow('odds_btts_no','No', 100-m.p_btts);
+
+  attachListeners(m,pOver,pUnder);
+  computeAll(m,pOver,pUnder);
+}
+
+function attachListeners(m,pOver,pUnder){
+  ['odds_home','odds_draw','odds_away','odds_over','odds_under','odds_btts_yes','odds_btts_no'].forEach(id=>{
+    document.getElementById(id).addEventListener('input',()=>computeAll(m,pOver,pUnder));
+  });
+}
+
+function setEdge(id,edge){
+  const el = document.getElementById(id);
+  el.textContent = (edge>=0?'+':'')+fmt(edge,1)+'%';
+  el.className = 'edge-pill '+edgeClass(edge);
+}
+function clearEdge(id){
+  const el = document.getElementById(id);
+  el.textContent = '—';
+  el.className = 'edge-pill';
+}
+
+function computeAll(m,pOver,pUnder){
+  const oh=document.getElementById('odds_home').value;
+  const od=document.getElementById('odds_draw').value;
+  const oa=document.getElementById('odds_away').value;
+  const oo=document.getElementById('odds_over').value;
+  const ou=document.getElementById('odds_under').value;
+  const oby=document.getElementById('odds_btts_yes').value;
+  const obn=document.getElementById('odds_btts_no').value;
+
+  const results = [];
+
+  const ih=impliedProb(oh), id_=impliedProb(od), ia=impliedProb(oa);
+  if(ih&&id_&&ia){
+    const [dh,dd,da] = devig([ih,id_,ia]);
+    setEdge('odds_home_edge', m.p_home-dh);
+    setEdge('odds_draw_edge', m.p_draw-dd);
+    setEdge('odds_away_edge', m.p_away-da);
+    results.push({market:'1X2',option:m.home,edge:m.p_home-dh,odds:oh,modelP:m.p_home,impliedP:dh});
+    results.push({market:'1X2',option:'Empate',edge:m.p_draw-dd,odds:od,modelP:m.p_draw,impliedP:dd});
+    results.push({market:'1X2',option:m.away,edge:m.p_away-da,odds:oa,modelP:m.p_away,impliedP:da});
+  } else {
+    clearEdge('odds_home_edge'); clearEdge('odds_draw_edge'); clearEdge('odds_away_edge');
+  }
+
+  const io=impliedProb(oo), iu=impliedProb(ou);
+  if(io&&iu){
+    const [dover,dunder] = devig([io,iu]);
+    setEdge('odds_over_edge', pOver-dover);
+    setEdge('odds_under_edge', pUnder-dunder);
+    results.push({market:'O/U',option:'Over',edge:pOver-dover,odds:oo,modelP:pOver,impliedP:dover});
+    results.push({market:'O/U',option:'Under',edge:pUnder-dunder,odds:ou,modelP:pUnder,impliedP:dunder});
+  } else {
+    clearEdge('odds_over_edge'); clearEdge('odds_under_edge');
+  }
+
+  const iby=impliedProb(oby), ibn=impliedProb(obn);
+  if(iby&&ibn){
+    const [dy,dn] = devig([iby,ibn]);
+    setEdge('odds_btts_yes_edge', m.p_btts-dy);
+    setEdge('odds_btts_no_edge', (100-m.p_btts)-dn);
+    results.push({market:'BTTS',option:'Sí',edge:m.p_btts-dy,odds:oby,modelP:m.p_btts,impliedP:dy});
+    results.push({market:'BTTS',option:'No',edge:(100-m.p_btts)-dn,odds:obn,modelP:100-m.p_btts,impliedP:dn});
+  } else {
+    clearEdge('odds_btts_yes_edge'); clearEdge('odds_btts_no_edge');
+  }
+
+  renderSummary(results);
+}
+
+function renderSummary(results){
+  const valid = results.filter(r=>!isNaN(r.edge)&&r.odds);
+  const panel = document.getElementById('summaryPanel');
+  if(valid.length===0){
+    panel.innerHTML = `<p class="summary-empty">Captura al menos un mercado completo (ambos lados) para ver el análisis de edge y la recomendación.</p>`;
+    return;
+  }
+  valid.sort((a,b)=>b.edge-a.edge);
+  const best = valid[0];
+
+  let bannerClass = 'none', badge='–', label='Sin ventaja clara';
+  if(best.edge>=5){ bannerClass='strong'; badge='✓'; label='Mejor valor'; }
+  else if(best.edge>=0){ bannerClass='mild'; badge='~'; label='Edge modesto'; }
+  else { badge='✕'; label='Sin edge positivo'; }
+
+  const banner = `<div class="rec-banner ${bannerClass}">
+    <div class="rec-card-badge">${badge}</div>
+    <div>
+      <div class="rec-text-label">${label}</div>
+      <div class="rec-text-value">${best.market} — ${best.option}</div>
+      <div class="rec-text-sub">Momio ${fmt(best.odds,2)} · modelo ${fmt(best.modelP)}% · implícita ${fmt(best.impliedP)}% · edge ${best.edge>=0?'+':''}${fmt(best.edge,1)}%</div>
+    </div>
+  </div>`;
+
+  const ledger = valid.map(r=>{
+    const cls = edgeClass(r.edge);
+    const color = cls==='strong' ? 'var(--yellow)' : cls==='pos' ? '#7fce82' : cls==='neg' ? '#f0958b' : 'var(--paper-dim)';
+    return `<div class="ledger-row">
+      <span class="ledger-mkt">${r.market} — ${r.option}</span>
+      <span class="ledger-detail">momio ${fmt(r.odds,2)} · modelo ${fmt(r.modelP)}% · implícita ${fmt(r.impliedP)}% <span class="ledger-edge" style="color:${color}">${r.edge>=0?'+':''}${fmt(r.edge,1)}%</span></span>
+    </div>`;
+  }).join('');
+
+  panel.innerHTML = banner + `<div class="ledger">${ledger}</div>`;
+}
+
+document.getElementById('matchSelect').addEventListener('change', render);
+document.getElementById('ouLine').addEventListener('change', render);
+
+render();
+</script>
+</body>
+</html>
